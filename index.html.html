@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Jejak Iman Mus'ab bin Umair</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* BODY */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: url('https://cdn.grid.id/crop/0x0:0x0/x/photo/2022/12/09/simon-berger-boyxzfqpwpu-unsplas-20221209103632.jpg') no-repeat center center fixed;
+  background-size: cover;
+  overflow-x: hidden;
+}
+
+/* BLUR LAYER */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  backdrop-filter: blur(10px) brightness(0.7);
+  z-index: -1;
+}
+
+/* GAME CARD */
+.game {
+  max-width: 900px;
+  margin: 50px auto;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 25px;
+  padding: 40px 30px;
+  box-shadow: 0 25px 60px rgba(0,0,0,.3);
+  animation: fade .6s;
+  text-align: center;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* ANIMATIONS */
+@keyframes fade{
+  from {opacity:0; transform:translateY(20px);}
+  to {opacity:1; transform:none;}
+}
+@keyframes zoom{
+  from{transform:scale(.9);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+@keyframes bounce{
+ 0%{transform:scale(1)}
+ 50%{transform:scale(1.2)}
+ 100%{transform:scale(1)}
+}
+@keyframes shake{
+ 0%,100%{transform:translateX(0)}
+ 25%{transform:translateX(-8px)}
+ 50%{transform:translateX(8px)}
+ 75%{transform:translateX(-8px)}
+}
+
+/* HEADER WAVE (tidak glowing) */
+#wave-title span {
+  display: inline-block;
+  color: #f59e0b;
+  font-family: 'Roboto Slab', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  animation: wave 1.5s infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* STATUS */
+.status {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+/* PROGRESS BAR */
+.progress {
+  background: #e5e7eb;
+  height: 22px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+.bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  transition: .5s;
+}
+
+/* IMAGE */
+img {
+  max-width: 100%;
+  border-radius: 18px;
+  margin: 20px 0;
+  animation: zoom .5s;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* STORY TEXT */
+.story {
+  font-size: 1.15rem;
+  min-height: 140px;
+  color: #333;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+/* BUTTONS */
+button {
+  background: linear-gradient(135deg,#f59e0b,#ef4444);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  margin: 8px;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+button:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+}
+
+/* ANIMATION CLASSES */
+.correct {animation: bounce .4s;}
+.wrong {animation: shake .4s;}
+</style>
+</head>
+
+<body>
+
+<!-- SOUND -->
+<audio id="click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+<audio id="correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="wrong" src="https://assets.mixkit.co/active_storage/sfx/2220/2220-preview.mp3"></audio>
+<audio id="levelup" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+<audio id="gameover" src="https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3"></audio>
+
+<div class="game" id="game">
+<h1 id="wave-title"></h1>
+
+<div class="status">
+ <div id="life">❤️❤️❤️</div>
+ <div id="score">⭐ 0</div>
+</div>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<img id="img" src="https://cdn.kemenag.go.id/storage/posts/16_9/big/1680687022.png">
+<p style="font-size:13px;color:#6b7280">(Ilustrasi representatif Mus‘ab bin ‘Umair)</p>
+
+<div class="story" id="text">
+ Seorang pemuda bangsawan Quraisy memulai perjalanan imannya…
+</div>
+
+<div id="btn">
+ <button onclick="next()">Mulai ▶️</button>
+</div>
+</div>
+
+<script>
+// Buat judul bergelombang per huruf
+const titleText = "🎮 Jejak Iman Mus‘ab bin Umair";
+const titleContainer = document.getElementById("wave-title");
+
+titleText.split("").forEach((char, i) => {
+  const span = document.createElement("span");
+  span.innerText = char;
+  span.style.animationDelay = `${i * 0.1}s`;
+  titleContainer.appendChild(span);
+});
+
+// GAME LOGIC (tetap sama seperti sebelumnya)
+let level=1,stage=0,life=3,score=0;
+
+const levels={
+1:[
+ {t:"Mus‘ab bin ‘Umair adalah pemuda paling mewah di Makkah.",
+  i:"https://cdn.kemenag.go.id/storage/posts/16_9/big/1680687022.png"},
+ {q:"Mus‘ab dikenal sebagai…",a:[
+  ["Pemuda miskin",false],
+  ["Pemuda tampan dan kaya",true],
+  ["Budak Quraisy",false]
+ ]},
+ {q:"Di mana Mus‘ab pertama kali belajar Islam?",a:[
+  ["Masjidil Haram",false],
+  ["Rumah Al-Arqam",true],
+  ["Pasar Ukaz",false]
+ ]},
+ {q:"Bagaimana reaksi ibunya?",a:[
+  ["Mendukung",false],
+  ["Marah dan mengurung",true],
+  ["Diam saja",false]
+ ]},
+ {t:"Mus‘ab kehilangan semua kemewahan demi iman.",
+  i:"https://cdn.kemenag.go.id/storage/posts/16_9/big/1680687022.png"}
+],
+2:[
+ {t:"Rasulullah ﷺ mengutus Mus‘ab ke Madinah.",
+  i:"https://cdn.kemenag.go.id/storage/posts/16_9/big/1680687022.png"},
+ {q:"Apa tugas Mus‘ab di Madinah?",a:[
+  ["Hakim",false],
+  ["Dai pertama Islam",true],
+  ["Panglima perang",false]
+ ]},
+ {q:"Siapa yang banyak masuk Islam lewat dakwah Mus‘ab?",a:[
+  ["Tokoh-tokoh Anshar",true],
+  ["Pedagang Quraisy",false],
+  ["Bangsa Romawi",false]
+ ]},
+ {q:"Mus‘ab gugur sebagai syahid di perang…",a:[
+  ["Badar",false],
+  ["Uhud",true],
+  ["Khandaq",false]
+ ]},
+ {q:"Apa yang kurang saat mengafani Mus‘ab?",a:[
+  ["Air",false],
+  ["Kain kafan",true],
+  ["Tanah kubur",false]
+ ]},
+ {t:"Mus‘ab syahid membawa panji Islam.",
+  i:"https://cdn.kemenag.go.id/storage/posts/16_9/big/1680687022.png"}
+]
+};
+
+function play(id){document.getElementById(id).play();}
+function update(){
+ document.getElementById("life").innerHTML="❤️".repeat(life);
+ document.getElementById("score").innerText="⭐ "+score;
+ document.getElementById("bar").style.width=(stage/levels[level].length*100)+"%";
+}
+function next(){
+ play("click");
+ if(stage>=levels[level].length){level===1?levelUp():finish(); return;}
+ update();
+ let d=levels[level][stage];
+ let text=document.getElementById("text");
+ let img=document.getElementById("img");
+ let btn=document.getElementById("btn");
+
+ if(d.q){
+   text.innerHTML="<b>"+d.q+"</b>";
+   btn.innerHTML="";
+   d.a.forEach(x=>{
+     btn.innerHTML+=`<button onclick="answer(${x[1]})">${x[0]}</button>`;
+   });
+ }else{
+   text.innerText=d.t;
+   img.src=d.i;
+   btn.innerHTML=`<button onclick="stage++; next()">Lanjut ➡️</button>`;
+ }
+}
+function answer(ok){
+ let g=document.getElementById("game");
+ if(ok){score+=10;play("correct");g.classList.add("correct")}
+ else{life--;play("wrong");g.classList.add("wrong")}
+ setTimeout(()=>g.className="game",400);
+ stage++;
+ life<=0?over():next();
+}
+function levelUp(){
+ play("levelup"); level=2; stage=0;
+ document.getElementById("text").innerHTML="🎉 LEVEL 2 TERBUKA!<br>Dakwah & Pengorbanan";
+ document.getElementById("btn").innerHTML=`<button onclick="next()">Masuk Level 2 ▶️</button>`;
+}
+function over(){
+ play("gameover");
+ document.getElementById("text").innerHTML="💀 Game Over<br>Iman lebih berharga dari dunia.";
+ document.getElementById("btn").innerHTML=`<button onclick="location.reload()">Ulang 🔄</button>`;
+}
+function finish(){
+ play("levelup");
+ document.getElementById("text").innerHTML="🏆 TAMAT!<br>Mus‘ab bin ‘Umair — Teladan Iman Sepanjang Zaman";
+ document.getElementById("btn").innerHTML=`<button onclick="location.reload()">Main Lagi 🔄</button>`;
+}
+</script>
+
+</body>
+</html>
